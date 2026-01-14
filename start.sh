@@ -1,5 +1,18 @@
 #!/bin/bash
 
+if [ -n "${CLIENT_ID}" ]; then
+  # Get JWT token for App
+  JWT=$(./jwt.sh "${CLIENT_ID}" /tmp/private.pem)
+
+  ORG=$(echo $REPOSITORY | cut -f1 -d /)
+
+  # Get installation id for org
+  INSTALLATION_ID=$(curl --request GET --url "https://api.github.com/orgs/${ORG}/installation" --header "Accept: application/vnd.github+json" --header "Authorization: Bearer ${JWT}" --header "X-GitHub-Api-Version: 2022-11-28"  | jq -r .id -)
+
+  # Exchange with access token
+  ACCESS_TOKEN=$(curl -fsS -X POST --header "Authorization: Bearer ${JWT}" --header "X-GitHub-Api-Version: 2022-11-28"   -H "Accept: application/vnd.github+json"  https://api.github.com/app/installations/${INSTALLATION_ID}/access_tokens | jq -r .token -)
+fi
+
 if [[ "$REPOSITORY" != *"/"* ]]; then
   REPO_TYPE="orgs"
 else
