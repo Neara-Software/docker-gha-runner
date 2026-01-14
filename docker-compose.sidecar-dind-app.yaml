@@ -45,10 +45,30 @@ services:
     networks:
       - runner-network
 
+  bazel-cache:
+    container_name: bazel-remote-cache
+    image: buchgr/bazel-remote-cache:v1.3.4
+    restart: always
+    networks:
+      - runner-network
+    # make ports 9090 (mapped to 8080) and 9092 available other services but NOT to the host
+    expose:
+      - 9090:8080
+      - 9092:9092
+    # note: --max_size is in GB
+    command: --max_size=25
+    # NOTE: mount a docker volume directory as /data to persist the cache
+    volumes:
+      - bazel-cache:/data
+    environment:
+      BAZEL_REMOTE_GRPC_PORT: 9092
+
+
 volumes:
   docker-certs-client:
   docker-certs-ca:
   docker-var-lib-docker:
+  bazel-cache:
 
 networks:
   runner-network:
