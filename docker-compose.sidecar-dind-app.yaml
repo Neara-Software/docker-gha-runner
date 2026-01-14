@@ -46,7 +46,6 @@ services:
       - runner-network
 
   bazel-cache:
-    container_name: bazel-remote-cache
     image: buchgr/bazel-remote-cache:v1.3.4
     restart: always
     networks:
