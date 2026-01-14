@@ -10,7 +10,8 @@ REG_TOKEN=$(curl -fsS -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Acce
 
 echo "Using registration token $REG_TOKEN"
 
-./config.sh --url https://github.com/${REPOSITORY} --token $REG_TOKEN --ephemeral --unattended
+
+./config.sh --url https://github.com/${REPOSITORY} --token $REG_TOKEN --ephemeral --unattended ${EXTRA_ARGS}
 
 cleanup() {
     echo "Removing runner..."
