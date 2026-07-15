@@ -8,7 +8,17 @@ RUN apt update && apt install -y curl wget sudo git jq ca-certificates gnupg lsb
     mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
     echo "deb [arch=${TARGETARCH} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list && \
-    apt update && apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    apt update && apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin unzip
+
+
+# Install AWS CLI
+WORKDIR /tmp
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && \
+    rm awscliv2.zip
+
+
 
 RUN useradd -G sudo,docker -ms /bin/bash github && \
     install -o github -g github -m 0755 -d /home/github/actions && \
