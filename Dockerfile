@@ -2,7 +2,7 @@ FROM ubuntu:22.04
 
 ARG TARGETARCH
 ARG OS=linux
-ARG VERSION=2.331.0
+ARG VERSION=2.335.1
 
 RUN apt update && apt install -y curl wget sudo git jq ca-certificates gnupg lsb-release && \
     mkdir -p /etc/apt/keyrings && \
